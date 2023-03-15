@@ -2,9 +2,9 @@ name: MSBuild
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "githubActionsFix" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "githubActionsFix" ]
 
 env:
   # Path to the solution file relative to the root of the project.
@@ -56,4 +56,4 @@ jobs:
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: |
         cd build
-        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} vicoder.sln
+        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} vicorder.sln
