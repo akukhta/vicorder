@@ -42,8 +42,7 @@ jobs:
       run : |
         mkdir build
         cd build
-        conan profile detect
-        conan install --build missing ../conanfile.txt -pr ../profile.txt
+        conan install ../conanfile.txt --profile ../profile.txt
         cd ..
       
     - name: generate vsproj
