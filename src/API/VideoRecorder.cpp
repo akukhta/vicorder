@@ -1,4 +1,6 @@
 #include "../../include/vicorder/VideoRecorder.h"
+#include "../../include/vicorder/TOTask.h"
+#include "../../src/common/AviCreateTask.h"
 
 void VideoRecorder::setTask(std::shared_ptr<TOTask> task)
 {
@@ -43,6 +45,17 @@ std::vector<HMONITOR> VideoRecorder::getMonitors()
 	std::vector<HMONITOR> monitors;
 	EnumDisplayMonitors(NULL, NULL, &VideoRecorder::getMonitorsHandlers, reinterpret_cast<LPARAM>(&monitors));
 	return monitors;
+}
+
+VICORDER_API bool VideoRecorder::save(std::string_view filePath)
+{
+	if (auto aviOutput = dynamic_cast<AviCreateTask*>(handlers.back().get()))
+	{
+		std::filesystem::rename(aviOutput->getFileName(), filePath);
+		return true;
+	}
+
+	return false;
 }
 
 BOOL VideoRecorder::getMonitorsHandlers(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)

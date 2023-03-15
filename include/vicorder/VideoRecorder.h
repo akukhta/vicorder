@@ -15,9 +15,9 @@
 #include <atomic>
 #include <array>
 #include <iostream>
-#include "../../include/vicorder/TOTask.h"
-#include "../../src/common/AviCreateTask.h"
 #include "../../src/common/dllinterface.h"
+
+class TOTask;
 
 class VideoRecorder
 {
@@ -54,17 +54,7 @@ public:
 	/// <param name="filePath">Path to save</param>
 	/// <returns>true if saving was successfull, otherwise false </returns>
 	//template <class T> requires (std::is_same_v<std::remove_cvref_t<T>, std::string> || std::is_same_v(std::remove_cvref_t<T>, char))
-	VICORDER_API bool save(std::string_view filePath)
-	{
-		if (auto aviOutput = dynamic_cast<AviCreateTask*>(handlers.back().get()))
-		{
-			std::filesystem::rename(aviOutput->getFileName(), filePath);
-			return true;
-		}
-
-		return false;
-	}
-
+	VICORDER_API bool save(std::string_view filePath);
 private:
 	/// <summary>
 	/// Chain of responsibility pattern implementation
