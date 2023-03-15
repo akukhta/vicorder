@@ -2,7 +2,11 @@
 #include <string>
 #include <type_traits>
 #include <Windows.h>
-#include <opencv2/opencv.hpp>
+
+namespace cv
+{
+	class Size;
+}
 
 class CommonUtiles
 {
@@ -40,15 +44,7 @@ public:
 	/// </summary>
 	/// <param name="monitor">Monitor's handle</param>
 	/// <returns>CVSIZE</returns>
-	static cv::Size getMonitorsSizeCV(HMONITOR monitor)
-	{
-		MONITORINFOEX mi;
-
-		mi.cbSize = sizeof(mi);
-		GetMonitorInfo(monitor, &mi);
-
-		return cv::Size{ mi.rcMonitor.right - mi.rcMonitor.left, mi.rcMonitor.bottom - mi.rcMonitor.top };
-	}
+	static std::unique_ptr<cv::Size> getMonitorsSizeCV(HMONITOR monitor);
 
 	/// <summary>
 	/// Helper function converts megabytes to bytes
