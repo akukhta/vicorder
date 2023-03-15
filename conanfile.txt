@@ -1,4 +1,5 @@
 [requires]
+xz_utils/5.4.0
 opencv/4.5.5
 
 [generators]
