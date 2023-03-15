@@ -60,6 +60,7 @@ public:
 		return static_cast<size_t>(mb * 1024 * 1000);
 	}
 
+
 	/// <summary>
 	/// Returns randomly generated string
 	/// </summary>

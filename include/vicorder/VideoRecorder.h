@@ -24,6 +24,10 @@ class VideoRecorder
 public:
 	VideoRecorder() = default;
 
+
+	/// <summary>
+	/// Add a new task into the chain
+	/// </summary>
 	VICORDER_API void setTask(std::shared_ptr<TOTask> task);
 
 	/// <summary>
@@ -35,12 +39,21 @@ public:
 	/// Method to stop recording
 	/// </summary>
 	VICORDER_API void stopRecord();
-	VICORDER_API ~VideoRecorder();
 
+	VICORDER_API ~VideoRecorder() = default;
+
+#ifdef _DEBUG
 	/// <summary>
 	/// Print info of handled events
 	/// </summary>
 	VICORDER_API void printDebugInfo();
+#endif
+
+	/// <summary>
+	/// Returns vector contains count of handled event
+	/// </summary>
+	/// <returns>handled events counts</returns>
+	VICORDER_API std::vector<size_t> getHandledEventCounts();
 
 	/// <summary>
 	/// Static function to get descriptors of monitors

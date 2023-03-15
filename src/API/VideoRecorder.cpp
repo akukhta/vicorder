@@ -29,14 +29,23 @@ void VideoRecorder::stopRecord()
 	}
 }
 
-VideoRecorder::~VideoRecorder()
-{
-	;
-}
-
+#ifdef _DEBUG
 void VideoRecorder::printDebugInfo()
 {
 	std::cout << std::format("Frames taken: {}, Frames compressed: {}, Frames written: {}", handlers[0]->getStat(), handlers[1]->getStat(), handlers[2]->getStat());
+}
+#endif
+
+std::vector<size_t> VideoRecorder::getHandledEventCounts()
+{
+	std::vector<size_t> counts {handlers.size()};
+
+	for (auto& task : handlers)
+	{
+		counts.push_back(task->getStat());
+	}
+
+	return counts;
 }
 
 std::vector<HMONITOR> VideoRecorder::getMonitors()
@@ -47,7 +56,7 @@ std::vector<HMONITOR> VideoRecorder::getMonitors()
 	return monitors;
 }
 
-VICORDER_API bool VideoRecorder::save(std::string_view filePath)
+bool VideoRecorder::save(std::string_view filePath)
 {
 	if (auto aviOutput = dynamic_cast<AviCreateTask*>(handlers.back().get()))
 	{
