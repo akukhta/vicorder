@@ -15,7 +15,8 @@ public:
 	/// </summary>
 	/// <param name="hmonitor">Descriptor of monitor selected to record</param>
 	/// <param name="cpTask">Pointer to compressing command object</param>
-	explicit CaptureTask(HMONITOR hmonitor, std::weak_ptr<TOTask> next = std::weak_ptr<TOTask>()) : TOTask(next)
+	explicit CaptureTask(HMONITOR hmonitor, std::weak_ptr<TOTask> next = std::weak_ptr<TOTask>()) noexcept :
+		TOTask(next)
 	{
 		this->monitor = hmonitor;
 		mi.cbSize = sizeof(mi);
@@ -71,7 +72,7 @@ private:
 	/// Mathod to take screenshot
 	/// </summary>
 	/// <returns>Descriptor to an Image</returns>
-	HBITMAP getScreen()
+	HBITMAP getScreen() noexcept
 	{
 		hDC = CreateDC(NULL, mi.szDevice, NULL, NULL);
 

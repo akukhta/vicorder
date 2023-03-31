@@ -1,3 +1,4 @@
+#include <source_location>
 #include "../../include/vicorder/VRBuilderDirector.h"
 #include "../../src/common/CaptureTask.h"
 #include "../../src/common/CompressingTask.h"
@@ -11,7 +12,23 @@
 VICORDER_API std::unique_ptr<VideoRecorder> VRBuilderDefDirector::getToAVI(HMONITOR monitor)
 {
 	std::shared_ptr<ExternalStorageManager> manager = std::make_shared<ExternalStorageManager>();
-	std::shared_ptr<TOTask> outputTask = std::make_shared<AviCreateTask>(CommonUtiles::getMonitorsSizeCV(monitor), manager);
+
+	std::optional<cv::Size> cvMonitorSize;
+	CommonUtiles::getMonitorsSize(monitor, cvMonitorSize);
+	std::shared_ptr<TOTask> outputTask;
+
+	if (cvMonitorSize)
+	{
+		outputTask = std::make_shared<AviCreateTask>(cvMonitorSize.value(), manager);
+	}
+	else
+	{
+		auto location = std::source_location::current();
+
+		throw std::runtime_error(std::format(
+			"Can not get monitor size at {}:{}", location.file_name(), location.function_name()));
+	}
+
 	std::shared_ptr<TOTask> frameDumpTask = std::make_shared<FrameToDiskTask>(manager, outputTask);
 	std::shared_ptr<TOTask> compressingTask = std::make_shared<CompressingTask>(frameDumpTask);
 	std::shared_ptr<TOTask> screeningTask = std::make_shared<CaptureTask>(monitor, compressingTask);

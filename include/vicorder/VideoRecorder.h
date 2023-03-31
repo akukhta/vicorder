@@ -46,14 +46,14 @@ public:
 	/// <summary>
 	/// Print info of handled events
 	/// </summary>
-	VICORDER_API void printDebugInfo();
+	VICORDER_API void printDebugInfo() const noexcept;
 #endif
 
 	/// <summary>
 	/// Returns vector contains count of handled event
 	/// </summary>
 	/// <returns>handled events counts</returns>
-	VICORDER_API std::vector<size_t> getHandledEventCounts();
+	VICORDER_API std::vector<size_t> getHandledEventCounts() const noexcept;
 
 	/// <summary>
 	/// Static function to get descriptors of monitors
@@ -67,13 +67,13 @@ public:
 	/// <param name="filePath">Path to save</param>
 	/// <returns>true if saving was successfull, otherwise false </returns>
 	//template <class T> requires (std::is_same_v<std::remove_cvref_t<T>, std::string> || std::is_same_v(std::remove_cvref_t<T>, char))
-	VICORDER_API bool save(std::string_view filePath);
+	VICORDER_API bool save(std::string_view filePath) const noexcept;
 private:
 	/// <summary>
 	/// Chain of responsibility pattern implementation
 	/// </summary>
 	std::vector<std::shared_ptr<TOTask>> handlers;
 	
-	static BOOL getMonitorsHandlers(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData);
+	static BOOL getMonitorsHandlers(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) noexcept;
 };
 

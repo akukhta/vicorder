@@ -36,15 +36,13 @@ void VideoRecorder::printDebugInfo()
 }
 #endif
 
-std::vector<size_t> VideoRecorder::getHandledEventCounts()
+std::vector<size_t> VideoRecorder::getHandledEventCounts() const noexcept
 {
-	std::vector<size_t> counts {handlers.size()};
+	std::vector<size_t> counts;
+	counts.reserve(handlers.size());
 
-	for (auto& task : handlers)
-	{
-		counts.push_back(task->getStat());
-	}
-
+	std::for_each(handlers.begin(), handlers.end(), [&counts](auto x) { counts.push_back(x->getStat()); });
+	
 	return counts;
 }
 
@@ -56,7 +54,7 @@ std::vector<HMONITOR> VideoRecorder::getMonitors()
 	return monitors;
 }
 
-bool VideoRecorder::save(std::string_view filePath)
+bool VideoRecorder::save(std::string_view filePath) const noexcept
 {
 	if (auto aviOutput = dynamic_cast<AviCreateTask*>(handlers.back().get()))
 	{
@@ -67,7 +65,7 @@ bool VideoRecorder::save(std::string_view filePath)
 	return false;
 }
 
-BOOL VideoRecorder::getMonitorsHandlers(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
+BOOL VideoRecorder::getMonitorsHandlers(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData) noexcept
 {
 	reinterpret_cast<std::vector<HMONITOR>*>(dwData)->push_back(hMonitor);
 

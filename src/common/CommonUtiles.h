@@ -15,7 +15,7 @@ public:
 	/// <param name="str">String to convert</param>
 	/// <returns>converted wstring </returns>
 	template <class T> requires std::is_same_v<typename std::remove_cvref<T>::type, std::string>
-	static std::wstring inline strToW(T&& str)
+	static std::wstring inline strToW(T&& str) noexcept
 	{
 		std::wstring w(str.begin(), str.end());
 		return w;
@@ -26,28 +26,21 @@ public:
 	/// </summary>
 	/// <param name="monitor">Monitor's handle</param>
 	/// <returns>std::par<size_t, size_t>(width, height)</returns>
-	static std::pair<size_t, size_t> getMonitorsSize(HMONITOR monitor)
+	template <class T>
+	static void getMonitorsSize(HMONITOR monitor, std::optional<T>& size) noexcept
 	{
 		MONITORINFOEX mi;
 
 		mi.cbSize = sizeof(mi);
-		GetMonitorInfo(monitor, &mi);
 
-		return { mi.rcMonitor.right - mi.rcMonitor.left, mi.rcMonitor.bottom - mi.rcMonitor.top };
-	}
-	/// <summary>
-	/// Function returns monitor's size for OpenCV API
-	/// </summary>
-	/// <param name="monitor">Monitor's handle</param>
-	/// <returns>CVSIZE</returns>
-	static cv::Size getMonitorsSizeCV(HMONITOR monitor)
-	{
-		MONITORINFOEX mi;
-
-		mi.cbSize = sizeof(mi);
-		GetMonitorInfo(monitor, &mi);
-
-		return cv::Size{ mi.rcMonitor.right - mi.rcMonitor.left, mi.rcMonitor.bottom - mi.rcMonitor.top };
+		if (GetMonitorInfo(monitor, &mi))
+		{
+			size = T{ mi.rcMonitor.right - mi.rcMonitor.left, mi.rcMonitor.bottom - mi.rcMonitor.top };
+		}
+		else
+		{
+			size = std::nullopt;
+		}
 	}
 
 	/// <summary>
@@ -55,7 +48,7 @@ public:
 	/// </summary>
 	/// <param name="mb">Megabytes</param>
 	/// <returns>Bytes</returns>
-	static size_t mbToBytes(double mb)
+	static size_t mbToBytes(double mb) noexcept
 	{
 		return static_cast<size_t>(mb * 1024 * 1000);
 	}
@@ -65,7 +58,7 @@ public:
 	/// Returns randomly generated string
 	/// </summary>
 	/// <returns></returns>
-	static  std::string getRandomString()
+	static  std::string getRandomString() noexcept
 	{
 		return std::to_string(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 	}
